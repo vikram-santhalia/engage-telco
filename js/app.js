@@ -207,24 +207,24 @@ angular.module( 'engageApp', [
     $scope.graphs = [
       {
         graphCId: "my-email-graph",
-        icon: "fa-envelope",
+        icon: "fa-list-alt",
         iconChange: "fa-caret-up",
         change: "11.9% ",
         val: "2.1K",
         graphId: "email_graph",
-        bottomText: "Email",
+        bottomText: "Usage Data",
         bottomClass: "graph_mail",
         active: true,
         arrowClass: "arrowMail"
       },
       {
         graphCId: "my-click-graph",
-        icon: "fa-hand-o-up",
+        icon: "fa-users",
         iconChange: "fa-caret-up",
         change: "13.2% ",
         val: "6.9K",
         graphId: "click_graph",
-        bottomText: "Click Stream",
+        bottomText: "Demographic Data",
         bottomClass: "graph_click",
         active: false,
         arrowClass: "arrowClick"
@@ -300,15 +300,15 @@ angular.module( 'engageApp', [
             iconcolor: 'database'
           },
           {
-            title: 'Updated ClickStream Data into Engage360',
+            title: 'Updated Demographic Data into Engage360',
             timestamp: 'September 05, 03:44:16',
-            icon: 'fa-hand-o-up',
+            icon: 'fa-users',
             iconcolor: 'hand'
           },
           {
-            title: 'Completed download of ClickStream',
+            title: 'Completed download of Demographic data',
             timestamp: 'September 05, 03:43:22',
-            icon: 'fa-hand-o-up',
+            icon: 'fa-users',
             iconcolor: 'hand'
           },
           /*{
@@ -336,9 +336,9 @@ angular.module( 'engageApp', [
             iconcolor: 'phone'
           },*/
           {
-            title: 'Updated Email Database into Engage360',
+            title: 'Updated Usage Database into Engage360',
             timestamp: 'September 04, 03:41:19',
-            icon: 'fa-envelope',
+            icon: 'fa-list-alt',
             iconcolor: 'envelope'
           }
         ]
@@ -347,9 +347,9 @@ angular.module( 'engageApp', [
         date: "September 04",
         data: [
            {
-              title: 'Completed download of Email Database',
+              title: 'Completed download of Usage Database',
               timestamp: 'September 04,  03:40:52',
-              icon: 'fa-envelope',
+              icon: 'fa-list-alt',
               iconcolor: 'envelope'
             },
             {
