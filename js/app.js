@@ -15,15 +15,18 @@ angular.module( 'engageApp', [
     };
     $rootScope.otherData = {
       'twitterDesc':"",
+      /*'atmDesc':"",*/
       'emailSubject':"",
       'smsDesc':""
     };
     $rootScope.adContent = {
-      'display' :  {'saved':'No','banner':''},
-      'facebook' : {'saved':'No','banner':'','title':'','description':''},
-      'twitter' :  {'saved':'No','description':''},
-      'email' :    {'saved':'No','subject':'','banner':''},
-      'sms' :      {'saved':'No','description':''}
+      'display' :  {'saved':'No','banner':'','qcd':''},
+      'facebook' : {'saved':'No','banner':'','title':'','description':'','qcd':''},
+      'twitter' :  {'saved':'No','description':'','qcd':''},
+      'email' :    {'saved':'No','subject':'','banner':'','qcd':''},
+      'sms' :      {'saved':'No','description':'','qcd':''},
+      /*'atm' :      {'saved':'No','description':'','qcd':''},*/
+      'crossD':    {'saved':'No','qcd':'','enable':false, 'enabled':'is not enabled'}
     };
 })
 
@@ -42,6 +45,7 @@ angular.module( 'engageApp', [
   function($scope, $rootScope, growl,FileUploader) {
 
     $scope.ruleConditionData = [
+      {"name":""},
       {"name":"Not Equal To"},
       {"name":"Equal To"},
       {"name":"Less Than"},
@@ -50,68 +54,104 @@ angular.module( 'engageApp', [
       {"name":"Greater Than Or Equal To"}
     ];
 
-    $scope.statementTelcoData = [
-      {"name":"Customer Number"},
-      {"name":"Customer Gender"},
-      {"name":"Customer City"},
-      {"name":"Customer Type"},
-      {"name":"Manufacturer"},
-      {"name":"Model Number"},
-      {"name":"Plan Name"},
-      {"name":"Plan MinRental"},
-      {"name":"Plan PulseRate(Sec)"},
-      {"name":"Roaming Enbaled"},
-      {"name":"Call Duration"},
-      {"name":"Number of Calls"},
-      {"name":"Total Minutes"},
-      {"name":"Total Roaming Minutes"},
-      {"name":"Total Long Distance Minutes"},
-      {"name":"Total Call Cost"},
-      {"name":"Total Roaming Cost"},
-      {"name":"Total Long Distance Cost"},
-      {"name":"Feature type"},
-      {"name":"Data Pack"},
-      {"name":"Data Usage"},
-      {"name":"Data Tariff"},
-      {"name":"Free Data Usage"},
-      {"name":"Prepaid Packs"},
-      {"name":"Date Activated"},
-      {"name":"Date LastUsed"}
+    $scope.statementBankingData = [
+        {"name":""},
+        {"name":"Customer Number"},
+        {"name":"Customer Gender"},
+        {"name":"Customer City"},
+        {"name":"Customer Type"},
+        {"name":"Manufacturer"},
+        {"name":"Model Number"},
+        {"name":"Plan Name"},
+        {"name":"Plan MinRental"},
+        {"name":"Plan PulseRate(Sec)"},
+        {"name":"Roaming Enbaled"},
+        {"name":"Call Duration"},
+        {"name":"Number of Calls"},
+        {"name":"Total Minutes"},
+        {"name":"Total Roaming Minutes"},
+        {"name":"Total Long Distance Minutes"},
+        {"name":"Total Call Cost"},
+        {"name":"Total Roaming Cost"},
+        {"name":"Total Long Distance Cost"},
+        {"name":"Feature type"},
+        {"name":"Data Pack"},
+        {"name":"Data Usage"},
+        {"name":"Data Tariff"},
+        {"name":"Free Data Usage"},
+        {"name":"Prepaid Packs"},
+        {"name":"Date Activated"},
+        {"name":"Date LastUsed"}
     ];
 
     $scope.skip = function(whom,index){
       $scope.adTabs[index + 1].active = true;
     }
 
-    
+    function getApprovalNames(arr){
+      var temp = [];
+      if(arr.length < 1){
+        return 'none'
+      }
+      else {
+        for(i = 0; i < arr.length; i++){
+          temp.push(arr[i].doneBy);
+        }
+        return temp.join(' ');
+      }
+    }
 
     $scope.saved = function(whom,index){
       if(whom === 'display'){
         $rootScope.adContent[whom]['saved'] = 'Yes';
         $rootScope.adContent[whom]['banner'] = uploader.queue;
+        $rootScope.adContent[whom]['qcd'] = getApprovalNames($scope.qcDisplay);
       }
       else if(whom === 'twitter'){
         this.twitterDesc;
         $rootScope.adContent[whom]['saved'] = 'Yes';
         $rootScope.adContent[whom]['description'] = this.twitterDesc;
+        $rootScope.adContent[whom]['qcd'] = getApprovalNames($scope.qcTwitter);
 
         $rootScope.otherData['twitterDesc'] = this.twitterDesc;
       }
+      /*else if(whom === 'atm'){
+        this.atmDesc;
+        $rootScope.adContent[whom]['saved'] = 'Yes';
+        $rootScope.adContent[whom]['description'] = this.atmDesc;
+        $rootScope.adContent[whom]['qcd'] = getApprovalNames($scope.qcAtm);
+
+        $rootScope.otherData['atmDesc'] = this.atmDesc;
+      }*/
       else if(whom === 'sms'){
         $rootScope.adContent[whom]['saved'] = 'Yes';
         $rootScope.adContent[whom]['description'] = this.smsDesc;
+        $rootScope.adContent[whom]['qcd'] = getApprovalNames($scope.qcSms);
 
         $rootScope.otherData['smsDesc'] = this.smsDesc;
+      }
+      else if(whom === 'crossD'){
+        $rootScope.adContent[whom]['saved'] = 'Yes';
+        $rootScope.adContent[whom]['qcd'] = getApprovalNames($scope.qcCrossD);
+        if($rootScope.adContent[whom]['enable']){
+          $rootScope.adContent[whom]['enabled'] = 'is enabled';
+        }
       }
       $scope.adTabs[index + 1].active = true;
     }
 
-
     $scope.tabs = [
+      {
+        'name': "Data On-Boarding",
+        route: "./views/tab6.html",
+        active: true,
+        icon:"images/icon_9.png",
+        disabled: false
+      },
       {
         'name': "Summary Dashboard",
         route: "./views/tab1.html",
-        active: true,
+        active: false,
         icon:"images/icon_1.png",
         disabled: false
       },
@@ -145,163 +185,418 @@ angular.module( 'engageApp', [
       }
     ];
 
-  $scope.oneAtATime = true;
+    $scope.avgTimes = [
+      {
+        value:3.72,
+        className:'envelope'
+      },
+      {
+        value:4.17,
+        className:'phone'
+      },
+      {
+        value:2.13,
+        className:'database'
+      },
+      {
+        value:8.05,
+        className:'hand'
+      }
+    ];
 
-  $scope.groups = [
-    {
+    $scope.graphs = [
+      {
+        graphCId: "my-email-graph",
+        icon: "fa-envelope",
+        iconChange: "fa-caret-up",
+        change: "11.9% ",
+        val: "2.1K",
+        graphId: "email_graph",
+        bottomText: "Email",
+        bottomClass: "graph_mail",
+        active: true,
+        arrowClass: "arrowMail"
+      },
+      {
+        graphCId: "my-click-graph",
+        icon: "fa-hand-o-up",
+        iconChange: "fa-caret-up",
+        change: "13.2% ",
+        val: "6.9K",
+        graphId: "click_graph",
+        bottomText: "Click Stream",
+        bottomClass: "graph_click",
+        active: false,
+        arrowClass: "arrowClick"
+      },
+      {
+        graphCId: "my-call-graph",
+        icon: "fa-phone",
+        iconChange: "fa-caret-down",
+        change: "0.8% ",
+        val: "9.3K",
+        graphId: "call_graph",
+        bottomText: "Call Center",
+        bottomClass: "graph_call",
+        active: false,
+        arrowClass: "arrowCall"
+      },
+      {
+        graphCId: "my-data-graph",
+        icon: "fa-database",
+        iconChange: "fa-caret-up",
+        change: "8.7% ",
+        val: "13.2K",
+        graphId: "data_graph",
+        bottomText: "CRM",
+        bottomClass: "graph_data",
+        active: false,
+        arrowClass: "arrowData"
+      }
+    ];
+
+    $scope.activateGraph = function(index){
+      if(index === 0){
+        $scope.graphs[0].active = true;
+        $scope.graphs[1].active = false;
+        $scope.graphs[2].active = false;
+        $scope.graphs[3].active = false;
+      }
+      else if(index === 1){
+        $scope.graphs[0].active = false;
+        $scope.graphs[1].active = true;
+        $scope.graphs[2].active = false;
+        $scope.graphs[3].active = false;
+      }
+      else if(index === 2){
+        $scope.graphs[0].active = false;
+        $scope.graphs[1].active = false;
+        $scope.graphs[2].active = true;
+        $scope.graphs[3].active = false;
+      }
+      else if(index === 3){
+        $scope.graphs[0].active = false;
+        $scope.graphs[1].active = false;
+        $scope.graphs[2].active = false;
+        $scope.graphs[3].active = true;
+      }
+      
+    };
+
+    $scope.datedActivities = [
+      {
+        date: "Today",
+        data: [
+          /*{
+            title: 'Time taken to download Email Database is 20s',
+            timestamp: 'September 05, 03:07:42',
+            icon: 'fa-envelope',
+            iconcolor: 'envelope' 
+          },*/
+          {
+            title: 'Completed download of CRM Database',
+            timestamp: 'September 05, 03:57:02',
+            icon: 'fa-database',
+            iconcolor: 'database'
+          },
+          {
+            title: 'Updated ClickStream Data into Engage360',
+            timestamp: 'September 05, 03:44:16',
+            icon: 'fa-hand-o-up',
+            iconcolor: 'hand'
+          },
+          {
+            title: 'Completed download of ClickStream',
+            timestamp: 'September 05, 03:43:22',
+            icon: 'fa-hand-o-up',
+            iconcolor: 'hand'
+          },
+          /*{
+            title: 'Time taken to download CRM Database is 172s',
+            timestamp: 'September 05, 03:44:35',
+            icon: 'fa-database',
+            iconcolor: 'database'
+          },*/
+          /*{
+            title: 'Time taken to download ClickStream is 172s',
+            timestamp: 'September 05, 03:43:18',
+            icon: 'fa-hand-o-up',
+            iconcolor: 'hand'
+          }, */ 
+          {
+            title: 'Completed download of CallCenter Data',
+            timestamp: 'September 05,  03:42:39',
+            icon: 'fa-phone',
+            iconcolor: 'phone'
+          },
+          /*{
+            title: 'Time taken to download CallCenter Data is 172s',
+            timestamp: 'September 05, 03:41:20',
+            icon: 'fa-phone',
+            iconcolor: 'phone'
+          },*/
+          {
+            title: 'Updated Email Database into Engage360',
+            timestamp: 'September 04, 03:41:19',
+            icon: 'fa-envelope',
+            iconcolor: 'envelope'
+          }
+        ]
+      },
+      {
+        date: "September 04",
+        data: [
+           {
+              title: 'Completed download of Email Database',
+              timestamp: 'September 04,  03:40:52',
+              icon: 'fa-envelope',
+              iconcolor: 'envelope'
+            },
+            {
+              title: 'Updated CallCenter Data into Engage360',
+              timestamp: 'September 05, 03:42:55',
+              icon: 'fa-phone',
+              iconcolor: 'phone'
+            }/*,
+            {
+              title: 'Time taken to download Email Database is 172s',
+              timestamp: 'September 04,  03:40:05',
+              icon: 'fa-envelope',
+              iconcolor: 'envelope'
+            }*/
+        ]
+      }
+    ];
+
+    $scope.oneAtATime = true;
+
+    $scope.groups = [
+      {
       title: 'Prepaid Balance < 5 Rupees',
       open: true,
       content: 'Reach all users whose balance is less than 5 Rupees and push ads about recharge'
-    },
-    {
-      title: '2GUser_DateLast Used < Aug 1',
-      open: false,
-      content: 'Since customer is not using 2G for sometime now, give some data pack offer'
-    },
-    {
-      title: 'PostPaid_ISD Plan ',
-      open: false,
-      content: 'User is heavy ISD user,  give 3G plans and cheaper ISD plans'
-    },
-    {
-      title: 'Total Roaming Cost > 5000 Rupees',
-      open: false,
-      content: 'Provide cheaper options for some frequently travelling countries '
-    },
-    {
-      title: 'Device User and Not Mobile User ',
-      open: false,
-      content: 'User has bought your device but mobile number of other player. Reach him to switch to your brand with better package of device and mobile'
-    }
-  ];
-
-  $scope.displayTable = [
-    {
-      icon:'images/icon_6.png',
-      key: 'Impressions',
-      value: '5999391'
-    },
-    {
-      key: 'Clicks',
-      value: '17309'
-    },
-    {
-      key: 'CTR',
-      value: '0.29'
-    },
-    {
-      key: 'Ad Spent',
-      value: '139472'
-    }    
-  ];
-
-  $scope.emailTable = [
-    {
-      icon:'images/icon_7.png',
-      key: 'Sent',
-      value: '3500'
-    },
-    {
-      key: 'Opened',
-      value: '2500'
-    },
-    {
-      key: 'Saved',
-      value: '1000'
-    },
-    {
-      key: 'Clicked',
-      value: '3800'
-    }    
-  ];
-
-  $scope.smsTable = [
-    {
-      icon:'images/icon_8.png',
-      key: 'Sent',
-      value: '170873'
-    },
-    {
-      key: 'Delivered',
-      value: '140560'
-    },
-    {
-      key: 'Career',
-      value: '1105'
-    },
-    {
-      key: 'Bounced',
-      value: '2113'
-    }    
-  ];
-
-  $scope.telcoTables=[
-    {
-      values: $scope.displayTable,
-      className: "tableDisplay",
-      id: "areachart",
-      headingClass: "headingDisplay",
-      heading:"Display",
-      active: true
-    },
-    {
-      values: $scope.emailTable,
-      className: "tableEmail",
-      id: "piechart",
-      headingClass: "headingEmail",
-      heading:"Email",
-      active: false
-    },
-    {
-      values: $scope.smsTable,
-      className: "tableSms",
-      id: "stackchart",
-      headingClass: "headingSms",
-      heading:"SMS",
-      active: false
-    }
-  ];
-
-  $scope.showTable = function(index){
-    var activeValue = $scope.telcoTables[index].active;
-    if(activeValue === false){
-      if(index === 0){
-        $scope.telcoTables[0].active = true;
-        $scope.telcoTables[1].active = false;
-        $scope.telcoTables[2].active = false;
+      },
+      {
+        title: '2GUser_DateLast Used < Aug 1',
+        open: false,
+        content: 'Since customer is not using 2G for sometime now, give some data pack offer'
+      },
+      {
+        title: 'PostPaid_ISD Plan ',
+        open: false,
+        content: 'User is heavy ISD user,  give 3G plans and cheaper ISD plans'
+      },
+      {
+        title: 'Total Roaming Cost > 5000 Rupees',
+        open: false,
+        content: 'Provide cheaper options for some frequently travelling countries '
+      },
+      {
+        title: 'Device User and Not Mobile User ',
+        open: false,
+        content: 'User has bought your device but mobile number of other player. Reach him to switch to your brand with better package of device and mobile'
       }
-      else if(index === 1){
-        $scope.telcoTables[1].active = true;
-        $scope.telcoTables[0].active = false;
-        $scope.telcoTables[2].active = false;
+    ];
+
+    $scope.displayTable = [
+      {
+        icon:'images/icon_6.png',
+        key: 'Impressions',
+        value: '5999391'
+      },
+      {
+        key: 'Clicks',
+        value: '17309'
+      },
+      {
+        key: 'CTR',
+        value: '0.29'
+      },
+      {
+        key: 'Ad Spent',
+        value: '139472'
+      }    
+    ];
+
+    $scope.emailTable = [
+      {
+        icon:'images/icon_7.png',
+        key: 'Sent',
+        value: '3500'
+      },
+      {
+        key: 'Opened',
+        value: '2500'
+      },
+      {
+        key: 'Saved',
+        value: '1000'
+      },
+      {
+        key: 'Clicked',
+        value: '3800'
+      }    
+    ];
+
+    $scope.smsTable = [
+      {
+        icon:'images/icon_8.png',
+        key: 'Sent',
+        value: '170873'
+      },
+      {
+        key: 'Delivered',
+        value: '140560'
+      },
+      {
+        key: 'Carrier',
+        value: '1105'
+      },
+      {
+        key: 'Bounced',
+        value: '2113'
+      }    
+    ];
+
+    $scope.facebookTable = [
+      {
+        icon:'images/icon_6.png',
+        key: 'Impressions',
+        value: '5999391'
+      },
+      {
+        key: 'Clicks',
+        value: '17309'
+      },
+      {
+        key: 'CTR',
+        value: '0.29'
+      },
+      {
+        key: 'Ad Spent',
+        value: '139472'
+      }    
+    ];
+
+    $scope.twitterTable = [
+      {
+        icon:'images/icon_6.png',
+        key: 'Impressions',
+        value: '5999391'
+      },
+      {
+        key: 'Engagement',
+        value: '17309'
+      },
+      {
+        key: 'Engagement Rate',
+        value: '0.29'
+      }   
+    ];
+
+    $scope.telcoTables=[
+      {
+        values: $scope.displayTable,
+        className: "tableDisplay",
+        id: "areachart",
+        headingClass: "headingDisplay",
+        heading:"Display",
+        active: true
+      },
+      {
+        values: $scope.emailTable,
+        className: "tableEmail",
+        id: "piechart",
+        headingClass: "headingEmail",
+        heading:"Email",
+        active: false
+      },
+      {
+        values: $scope.smsTable,
+        className: "tableSms",
+        id: "stackchart",
+        headingClass: "headingSms",
+        heading:"SMS",
+        active: false
+      },
+      {
+        values: $scope.facebookTable,
+        className: "tableFacebook",
+        id: "areachartFb",
+        headingClass: "headingFacebook",
+        heading:"Facebook",
+        active: false
+      },
+      {
+        values: $scope.twitterTable,
+        className: "tableTwitter",
+        id: "areachartTw",
+        headingClass: "headingTwitter",
+        heading:"Twitter",
+        active: false
       }
-      else if(index === 2){
-        $scope.telcoTables[2].active = true;
-        $scope.telcoTables[0].active = false;
-        $scope.telcoTables[1].active = false;
+    ];
+
+    $scope.showTable = function(index){
+      var activeValue = $scope.telcoTables[index].active;
+      if(activeValue === false){
+        if(index === 0){
+          $scope.telcoTables[0].active = true;
+          $scope.telcoTables[1].active = false;
+          $scope.telcoTables[2].active = false;
+          $scope.telcoTables[3].active = false;
+          $scope.telcoTables[4].active = false;
+        }
+        else if(index === 1){
+          $scope.telcoTables[1].active = true;
+          $scope.telcoTables[0].active = false;
+          $scope.telcoTables[2].active = false;
+          $scope.telcoTables[3].active = false;
+          $scope.telcoTables[4].active = false;
+        }
+        else if(index === 2){
+          $scope.telcoTables[2].active = true;
+          $scope.telcoTables[0].active = false;
+          $scope.telcoTables[1].active = false;
+          $scope.telcoTables[3].active = false;
+          $scope.telcoTables[4].active = false;
+        }
+        else if(index === 3){
+          $scope.telcoTables[2].active = false;
+          $scope.telcoTables[0].active = false;
+          $scope.telcoTables[1].active = false;
+          $scope.telcoTables[3].active = true;
+          $scope.telcoTables[4].active = false;
+        }
+        else if(index === 4){
+          $scope.telcoTables[2].active = false;
+          $scope.telcoTables[0].active = false;
+          $scope.telcoTables[1].active = false;
+          $scope.telcoTables[3].active = false;
+          $scope.telcoTables[4].active = true;
+        }
       }
     }
-  }
 
-  $scope.engagedSegment = {
-    name:"Segment Name",
-    desc:"Segment Description"
-  };
+    $scope.engagedSegment = {
+      name:"Segment Name",
+      desc:"Segment Description"
+    };
 
-  $scope.engageSegment = function(segment,desc){
-    $scope.engagedSegment.name = segment;
-    $scope.engagedSegment.desc = desc;
-    $scope.tabs[3].active = true;
-  }
+    $scope.engageSegment = function(segment,desc){
+      $scope.engagedSegment.name = segment;
+      $scope.engagedSegment.desc = desc;
+      $scope.tabs[4].active = true;
+    }
 
-  $scope.status = {
-    isFirstOpen: true,
-    isFirstDisabled: false
-  };
+    $scope.status = {
+      isFirstOpen: true,
+      isFirstDisabled: false
+    };
 
     $scope.adTabs = [
       {
-        'name': "Display",
+        'name': "RTB Exchange",
         route: "./views/adtab1.html",
         active: true,
         disabled: false
@@ -330,6 +625,24 @@ angular.module( 'engageApp', [
         active: false,
         disabled: false
       },
+      /*{
+        'name': "ATM",
+        route: "./views/adtab8.html",
+        active: false,
+        disabled: false
+      },*/
+      {
+        'name': "Display Buy",
+        route: "./views/adtab9.html",
+        active: false,
+        disabled: false
+      },
+      {
+        'name': "Cross-Device",
+        route: "./views/adtab7.html",
+        active: false,
+        disabled: false
+      },
       {
         'name': "Summary",
         route: "./views/adtab6.html",
@@ -346,60 +659,93 @@ angular.module( 'engageApp', [
     $scope.options = [{ name: "AND", id: 1 }, { name: "OR", id: 2 }];
     $scope.selectedOption = $scope.options[0];
   
+    
+    $scope.selectedRules = {
+      statementOptions : $scope.statementBankingData[0],
+      conditionOptions : $scope.ruleConditionData[0]
+    };
+
+    $scope.ruleData = [$scope.selectedRules];
+
+    
 
     $scope.addRule = function(value){
+      /*var tempData = {
+        statementOptions : $scope.statementBankingData[0],
+        conditionOptions : $scope.ruleConditionData[0]
+      };*/
+      $scope.ruleData.push(angular.copy($scope.selectedRules));
       id++;
       var rule = { 'id': id, 'operator': 'and'};
       $scope.rules.splice(value+1,0,rule);
     };
 
     $scope.tickRule = function(value){
-      $scope.decreaseMetrics();
+      var isFirstTick = true;
+      for(var i=1; i<$scope.metrics.length; i++){
+          if($scope.metrics[i]['value'] != 0){
+            isFirstTick = false;
+            break;
+          }
+      }
+      if(isFirstTick){
+        for(var i=1; i<$scope.metrics.length; i++){
+          $scope.metrics[i]['value'] = $scope.metricValues[i];
+          $scope.metrics[i]['formattedValue'] = numberWithCommas($scope.metrics[i]['value']);
+        } 
+      }
+      else{
+        $scope.decreaseMetrics();
+      }
     };
 
     $scope.removeRule = function(value){
       $scope.rules[value]['removed'] = true;
       $scope.rules.splice(value,1);
+      $scope.ruleData.splice(value,1);
       $scope.increaseMetrics();
     };
 
     $scope.changeCondition = function(option,index){
     }
 
-    $scope.defaultMetrics = [5588935,4709350,3753420,2010167,1075890,5388453];
+    $scope.defaultMetrics = [1000000,0,0,0,0,0];
 
     $scope.metrics = [
       {
         'name':"Total Users",
-        'value':"5588935",
+        'value':"1000000",
         'type':'success'
       },
       {
-        'name':"Desktop & Mobile",
-        'value':"4709350",
+        'name':"Desktop",
+        'value':"0",
         'type':'primary'
       },
       {
         'name':"Mobile",
-        'value':"3753420",
+        'value':"0",
         'type':'primary'
       },
       {
-        'name':"Desktop",
-        'value':"2010167",
+        'name':"Desktop & Mobile",
+        'value':"0",
         'type':'primary'
       },
       {
         'name':"Facebook",
-        'value':"1075890",
+        'value':"0",
         'type':'primary'
       },
       {
         'name':"Total Reach",
-        'value':"5388453",
+        'value':"0",
         'type':'warning'
       }
     ];
+
+
+    $scope.metricValues = [1000000,830419,517760,301007,211457,950442];
 
 
 
@@ -416,21 +762,22 @@ angular.module( 'engageApp', [
           $scope.metrics[i]['formattedValue'] = numberWithCommas($scope.metrics[i]['value']);
         }  
       }
-    }
+    };
 
     $scope.decreaseMetrics = function(){
       for(var i=1; i<$scope.metrics.length; i++){
         $scope.metrics[i]['value'] = decreaseValue($scope.metrics[i]['value'],5);
         $scope.metrics[i]['formattedValue'] = numberWithCommas($scope.metrics[i]['value']);
       } 
-    }
+    };
 
     $scope.increaseMetrics = function(){
+      var random = getRandomArbitrary(4,9);
       for(var i=1; i<$scope.metrics.length; i++){
-        $scope.metrics[i]['value'] = increaseValue($scope.metrics[i]['value'],5);
+        $scope.metrics[i]['value'] = increaseValue($scope.metrics[i]['value'],random);
         $scope.metrics[i]['formattedValue'] = numberWithCommas($scope.metrics[i]['value']);
       } 
-    }
+    };
 
     function numberWithCommas(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -441,7 +788,7 @@ angular.module( 'engageApp', [
     }
 
     function increaseValue(value,by){
-      return Math.ceil(value + (value * (by/100)));
+      return Math.ceil((value * (by/100)) + parseInt(value));
     }
 
     function getRandomArbitrary(min, max) {
@@ -459,24 +806,24 @@ angular.module( 'engageApp', [
 
     $scope.savedSegments = [
       {
-        name: "Segment 1",
+        name: "High 3G User",
         desc: "",
-        reach: "5388453"
+        reach: "527090"
       },
       {
-        name: "Segment 2",
+        name: "Frequent International Caller",
         desc: "",
-        reach: "2178021"
+        reach: "337025"
       },
       {
-        name: "Segment 3",
+        name: "Cities with few 2G users",
         desc: "",
-        reach: "3300913"
+        reach: "710181"
       },
       {
-        name: "Segment 4",
+        name: "Has Smartphone but 3G not enabled",
         desc: "",
-        reach: "1338100"
+        reach: "237100"
       }
     ];
 
@@ -508,6 +855,20 @@ angular.module( 'engageApp', [
         };
         $scope.savedSegments.unshift(segmentToSave);
         growl.addSuccessMessage("Your segment "+$scope.segmentValue.segmentName.toUpperCase()+" has been saved.");
+        $scope.segmentValue.segmentName = '';
+        $scope.segmentValue.segmentDesc = '';
+        $scope.rules.splice(0,$scope.rules.length);
+        for(var i=0; i<$scope.metrics.length; i++){
+          $scope.metrics[i]['value'] = $scope.defaultMetrics[i];
+          $scope.metrics[i]['formattedValue'] = numberWithCommas($scope.metrics[i]['value']);
+        }  
+        $scope.selectedRules = {
+          statementOptions : $scope.statementBankingData[0],
+          conditionOptions : $scope.ruleConditionData[0]
+        };
+        $scope.ruleData.splice(0,$scope.ruleData.length);
+        $scope.ruleData = [$scope.selectedRules];
+        $scope.tabs[3].active = true;
       } 
     };
 
@@ -518,6 +879,7 @@ angular.module( 'engageApp', [
         content: $scope.savedSegments[0].desc
       };
       $scope.groups.unshift(tempGroup);
+      $scope.savedSegments.splice(0,1);
       growl.addSuccessMessage("Your segment has been Engaged.");
       flushRootscopeData();
     };
@@ -541,16 +903,93 @@ angular.module( 'engageApp', [
       };
       $rootScope.otherData = {
         'twitterDesc':"",
+        /*'atmDesc':"",*/
         'emailSubject':"",
         'smsDesc':""
       };
       $rootScope.adContent = {
-        'display' :  {'saved':'No','banner':''},
-        'facebook' : {'saved':'No','banner':'','title':'','description':''},
-        'twitter' :  {'saved':'No','description':''},
-        'email' :    {'saved':'No','subject':'','banner':''},
-        'sms' :      {'saved':'No','description':''}
+        'display' :  {'saved':'No','banner':'','qcd':''},
+        'facebook' : {'saved':'No','banner':'','title':'','description':'','qcd':''},
+        'twitter' :  {'saved':'No','description':'','qcd':''},
+        'email' :    {'saved':'No','subject':'','banner':'','qcd':''},
+        'sms' :      {'saved':'No','description':'','qcd':''},
+        /*'atm' :      {'saved':'No','description':'','qcd':''},*/
+        'crossD':    {'saved':'No','qcd':'','enable':false, 'enabled':'is not enabled'}
       };
+    }
+
+
+    $scope.qcDisplay = [
+    ];
+    $scope.qcTwitter = [
+    ];
+    /*$scope.qcAtm = [
+    ];*/
+    $scope.qcSms = [
+    ];
+    $scope.qcCrossD = [
+    ];
+
+    $scope.addqc = function(addto){
+      var qc = { doneBy: "",done: false};
+      if(addto === "display"){
+        $scope.qcDisplay.push(qc);
+      }
+      else if(addto === "twitter"){
+        $scope.qcTwitter.push(qc);
+      }
+      /*else if(addto === "atm"){
+        $scope.qcAtm.push(qc);
+      }*/
+      else if(addto === "sms"){
+        $scope.qcSms.push(qc);
+      }
+      else if(addto === "crossd"){
+        $scope.qcCrossD.push(qc);
+      }
+    }
+
+    $scope.qcDone = function(index,addto){
+      if(addto === "display"){
+        if($scope.qcDisplay[index].doneBy.length < 1){
+          growl.addErrorMessage("Please add your name to complete QC.");
+        }
+        else{
+          $scope.qcDisplay[index].done = true ;
+        }
+      }
+      else if(addto === "twitter"){
+        if($scope.qcTwitter[index].doneBy.length < 1){
+          growl.addErrorMessage("Please add your name to complete QC.");
+        }
+        else{
+          $scope.qcTwitter[index].done = true ;
+        }
+      }
+      /*else if(addto === "atm"){
+        if($scope.qcAtm[index].doneBy.length < 1){
+          growl.addErrorMessage("Please add your name to complete QC.");
+        }
+        else{
+          $scope.qcTwitter[index].done = true ;
+        }
+      }*/
+      else if(addto === "sms"){
+        if($scope.qcSms[index].doneBy.length < 1){
+          growl.addErrorMessage("Please add your name to complete QC.");
+        }
+        else{
+          $scope.qcSms[index].done = true ;
+        }
+      }
+      else if(addto === "crossd"){
+        if($scope.qcCrossD[index].doneBy.length < 1){
+          growl.addErrorMessage("Please add your name to complete QC.");
+        }
+        else{
+          $scope.qcCrossD[index].done = true ;
+        }
+      }
     }
 
     $scope.cancel = function(){
@@ -559,6 +998,14 @@ angular.module( 'engageApp', [
         $scope.metrics[i]['value'] = $scope.defaultMetrics[i];
         $scope.metrics[i]['formattedValue'] = numberWithCommas($scope.metrics[i]['value']);
       }  
+      $scope.selectedRules = {
+        statementOptions : $scope.statementBankingData[0],
+        conditionOptions : $scope.ruleConditionData[0]
+      };
+      $scope.ruleData.splice(0,$scope.ruleData.length);
+      $scope.ruleData = [$scope.selectedRules];
+      $scope.segmentValue.segmentName = '';
+      $scope.segmentValue.segmentDesc = '';
       growl.addWarnMessage("Default values have been restored");
     };
 
@@ -620,25 +1067,56 @@ angular.module( 'engageApp', [
   $scope.fbTitle = '';
   $scope.fbDesc = '';
 
-
-   $scope.skip = function(whom,index){
-      $scope.adTabs[index + 1].active = true;
+  function getApprovalNames(arr){
+      var temp = [];
+      if(arr.length < 1){
+        return 'none'
+      }
+      else {
+        for(i = 0; i < arr.length; i++){
+          temp.push(arr[i].doneBy);
+        }
+        return temp.join(' ');
+      }
     }
+
+
+  $scope.skip = function(whom,index){
+    $scope.adTabs[index + 1].active = true;
+  }
+
+  $scope.qcFacebook = [
+  ];
+
+  $scope.addqc = function(){
+    var qc = { doneBy: "",done: false};
+    $scope.qcFacebook.push(qc);
+  }
+
+  $scope.qcDone = function(index){
+    if($scope.qcFacebook[index].doneBy.length < 1){
+      growl.addErrorMessage("Please add your name to complete QC.");
+    }
+    else{
+      $scope.qcFacebook[index].done = true ;
+    }
+  }
 
    
 
-    $scope.saved = function(whom,index){
-      if(whom === 'facebook'){
-        $rootScope.adContent[whom]['saved'] = 'Yes';
-        $rootScope.adContent[whom]['banner'] = $scope.fb.uploader.queue;
-        $rootScope.adContent[whom]['title'] = $scope.fbTitle;
-        $rootScope.adContent[whom]['description'] = $scope.fbDesc;
+  $scope.saved = function(whom,index){
+    if(whom === 'facebook'){
+      $rootScope.adContent[whom]['saved'] = 'Yes';
+      $rootScope.adContent[whom]['banner'] = $scope.fb.uploader.queue;
+      $rootScope.adContent[whom]['title'] = $scope.fbTitle;
+      $rootScope.adContent[whom]['description'] = $scope.fbDesc;
+      $rootScope.adContent[whom]['qcd'] = getApprovalNames($scope.qcFacebook);
 
-        $rootScope.fbData['title'] = $scope.fbTitle;
-        $rootScope.fbData['desc'] = $scope.fbDesc;
-      }
-      $scope.adTabs[index + 1].active = true;
+      $rootScope.fbData['title'] = $scope.fbTitle;
+      $rootScope.fbData['desc'] = $scope.fbDesc;
     }
+    $scope.adTabs[index + 1].active = true;
+  }
 
   var uploader = $scope.fb.uploader = $rootScope.fbRoot.uploader = new FileUploader({
             url: 'upload.php'
@@ -693,23 +1171,51 @@ angular.module( 'engageApp', [
   $scope.email = {};
   $scope.emailSubject = '';
 
-
-   $scope.skip = function(whom,index){
-      $scope.adTabs[index + 1].active = true;
-    }
-
-   
-
-    $scope.saved = function(whom,index){
-      if(whom === 'email'){
-        $rootScope.adContent[whom]['saved'] = 'Yes';
-        $rootScope.adContent[whom]['banner'] = $scope.email.uploader.queue;
-        $rootScope.adContent[whom]['subject'] = $scope.emailSubject;
-
-        $rootScope.otherData['emailSubject'] = $scope.emailSubject;
+  function getApprovalNames(arr){
+      var temp = [];
+      if(arr.length < 1){
+        return 'none'
       }
-      $scope.adTabs[index + 1].active = true;
+      else {
+        for(i = 0; i < arr.length; i++){
+          temp.push(arr[i].doneBy);
+        }
+        return temp.join(' ');
+      }
     }
+
+  $scope.skip = function(whom,index){
+    $scope.adTabs[index + 1].active = true;
+  }
+
+  $scope.qcEmail = [
+  ];
+
+  $scope.addqc = function(){
+    var qc = { doneBy: "",done: false};
+    $scope.qcEmail.push(qc);
+  }
+
+  $scope.qcDone = function(index){
+    if($scope.qcEmail[index].doneBy.length < 1){
+      growl.addErrorMessage("Please add your name to complete QC.");
+    }
+    else{
+      $scope.qcEmail[index].done = true ;
+    }
+  }
+
+  $scope.saved = function(whom,index){
+    if(whom === 'email'){
+      $rootScope.adContent[whom]['saved'] = 'Yes';
+      $rootScope.adContent[whom]['banner'] = $scope.email.uploader.queue;
+      $rootScope.adContent[whom]['subject'] = $scope.emailSubject;
+      $rootScope.adContent[whom]['qcd'] = getApprovalNames($scope.qcEmail);
+
+      $rootScope.otherData['emailSubject'] = $scope.emailSubject;
+    }
+    $scope.adTabs[index + 1].active = true;
+  }
 
   var uploader = $scope.email.uploader = $rootScope.emailRoot.uploader = new FileUploader({
             url: 'upload.php'

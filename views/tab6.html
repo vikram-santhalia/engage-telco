@@ -1,0 +1,101 @@
+<div class="row onboardTab">
+  <div class="seg_rule_heading">
+    <h3>Data On-Boarding</h3>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-3 activity_feed">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Data Available</h3>
+            </div>
+            <div class="panel-body concentric">
+              <div class="concLegends">
+                <div class="concLegend conc_fb">Vizury Cookie</div>
+                <div class="concLegend conc_em">Facebook Cookie</div>
+                <div class="concLegend conc_pn">Email</div>
+                <div class="concLegend conc_vc">Phone No</div>
+              </div>
+              <img src="images/concentric.png" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Activity Feed</h3>
+        </div>
+        <div class="panel-body activity-panel">
+
+          <div class="dated_activity" ng-repeat="datedActivity in datedActivities">
+            <div class="activity_seg"><span>{{datedActivity.date}}</span></div>
+            <div class="activity row" ng-repeat="activity in datedActivity.data">
+              <div class="col-sm-2">
+                <div class="activity_icon {{activity.iconcolor}}">
+                  <i class="fa {{activity.icon}}"></i>
+                </div>
+              </div>
+              <div class="col-sm-10">
+                <div class="row">
+                  <div class="col-sm-12 activity_title">{{activity.title}}</div>
+                </div>
+                 <div class="row">
+                  <div class="col-sm-12 activity_timestamp">{{activity.timestamp}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-9 custom-onboard-col">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Source-Wise Data</h3>
+            </div>
+            <div class="panel-body on-board-panel">
+               <div class="graphs">
+
+
+                <div class="graph" 
+                  id="{{graph.graphCId}}"
+                  ng-class="{active:graph.active}"
+                  ng-click="activateGraph($index)"
+                  ng-repeat="graph in graphs">
+                  <div class="graph_icon">
+                    <i class="fa {{graph.icon}} fa-2x"></i>
+                  </div>
+                  <div class="graph_up">
+                    <div>{{graph.change}}<i class="fa {{graph.iconChange}}"></i></div>
+                  </div>
+                  <div class="graph_val"><span>{{graph.val}}</span></div>
+                  <div class="flotgraph" id="{{graph.graphId}}"></div>
+                  <div class="bottom_heading {{graph.bottomClass}}">{{graph.bottomText}}</div>
+                  <div class="arrow-down {{graph.arrowClass}}" 
+                    ng-class="{graphActive:graph.active}">
+                  </div>
+                </div>
+                
+                
+                
+               </div>
+               <div class="m-chart">
+                <div id="multiLineChart"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

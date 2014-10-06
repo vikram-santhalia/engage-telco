@@ -3,12 +3,12 @@
   </div>
   <div class="row custom-row summary_container">
       <div class="row margin-top-20" ng-if="adContent.display.saved === 'Yes'">
-        <div class="col-md-4">
+        <div class="col-sm-4">
           <div class="summaryTitle">
-            <span>Display:</span>
+            <span>RTB Exchange:</span>
           </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-sm-8">
           <div class="banner_preview"  >
             <span ng-class="{remove:display.uploader.queue.length > 0}">Banner Preview</span>
              <div class="banners" ng-repeat="item in display.uploader.queue">
@@ -17,16 +17,17 @@
                   </div>
                 </div>
               </div>
+              <div class="qc_names">Approved by <b>{{adContent.display.qcd}}</b></div>
           </div>
       </div>
 
       <div class="row margin-top-20" ng-if="adContent.facebook.saved === 'Yes'">
-        <div class="col-md-4">
+        <div class="col-sm-4">
           <div class="summaryTitle">
             <span>Facebook:</span>
           </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-sm-8">
           <div class="banner_preview" >
             <div class="row fixed_row">
               <div class="fb_title">
@@ -34,7 +35,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-7">
+              <div class="col-sm-7">
                 <div class="fb_banner_preview"  >
                   <span ng-class="{remove:fbRoot.uploader.queue.length > 0}">Banner Preview</span>
                   <div class="banners" ng-repeat="item in fbRoot.uploader.queue">
@@ -45,36 +46,38 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-5">
+              <div class="col-sm-5">
                 <div class="fbBannerDesc">
                   <p>{{fbData['desc']}}</p>
                 </div>
               </div>
             </div>
           </div>
+          <div class="qc_names">Approved by <b>{{adContent.facebook.qcd}}</b></div>
         </div>
       </div>
 
 
       <div class="row margin-top-20" ng-if="adContent.twitter.saved === 'Yes'">
-        <div class="col-md-4">
+        <div class="col-sm-4">
           <div class="summaryTitle">
             <span>Twitter:</span>
           </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-sm-8">
           <textarea class="form-control" disabled ng-model="adContent.twitter.description" rows="6" cols="30" placeholder="Enter 140 characters"></textarea>
+          <div class="qc_names">Approved by <b>{{adContent.twitter.qcd}}</b></div>
         </div>
       </div>
 
 
       <div class="row margin-top-20" ng-if="adContent.email.saved === 'Yes'">
-        <div class="col-md-4">
+        <div class="col-sm-4">
           <div class="summaryTitle">
             <span>Email:</span>
           </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-sm-8">
           <div class="banner_preview" >
             <div class="row fixed_row">
               <div class="fb_title">
@@ -82,7 +85,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-10">
+              <div class="col-sm-10">
                 <div class="email_banner_preview"  >
                   <span ng-class="{remove:emailRoot.uploader.queue.length > 0}">Email Preview</span>
                   <div class="banners" ng-repeat="item in emailRoot.uploader.queue">
@@ -95,17 +98,43 @@
               </div>
             </div>
           </div>
+          <div class="qc_names">Approved by <b>{{adContent.email.qcd}}</b></div>
         </div>
       </div>
 
       <div class="row margin-top-20" ng-if="adContent.sms.saved === 'Yes'">
-        <div class="col-md-4">
+        <div class="col-sm-4">
           <div class="summaryTitle">
             <span>SMS:</span>
           </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-sm-8">
            <textarea disabled class="form-control" ng-model="adContent.sms.description" rows="6" cols="30" placeholder="Enter 250 characters"></textarea>
+           <div class="qc_names">Approved by <b>{{adContent.sms.qcd}}</b></div>
+        </div>
+      </div>
+
+      <div class="row margin-top-20" ng-if="adContent.atm.saved === 'Yes'">
+        <div class="col-sm-4">
+          <div class="summaryTitle">
+            <span>ATM:</span>
+          </div>
+        </div>
+        <div class="col-sm-8">
+          <textarea class="form-control" disabled ng-model="adContent.atm.description" rows="6" cols="30" placeholder="Enter 200 characters"></textarea>
+          <div class="qc_names">Approved by <b>{{adContent.atm.qcd}}</b></div>
+        </div>
+      </div>
+
+      <div class="row margin-top-20" ng-if="adContent.crossD.saved === 'Yes'">
+        <div class="col-sm-4">
+          <div class="summaryTitle">
+            <span>Cross Device:</span>
+          </div>
+        </div>
+        <div class="col-sm-8">
+           <span class="config" >Cross Device Configration {{adContent.crossD.enabled}}</span>
+           <div class="qc_names">Approved by <b>{{adContent.crossD.qcd}}</b></div>
         </div>
       </div>
 
